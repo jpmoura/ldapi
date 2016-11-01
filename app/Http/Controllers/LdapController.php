@@ -12,16 +12,37 @@ class LdapController extends Controller
   private function bindToServer()
   {
     $settings = $settings = LdapSettings::first();
-    $serverResource = ldap_connect($settings->server);
+    #var_dump($settings);
+      #echo $settings->server."\n";
+      #echo $settings->domain."\n";
+      #echo $settings->user."\n";
+      #echo $settings->pwd."\n";
+      #exit;
+      $serverResource = ldap_connect($settings->server);
 
     if($serverResource != FALSE) {
-      $isBinded = ldap_bind($serverResource, $settings->user . ',' . $settings->domain , $settings->password);
+      $isBinded = ldap_bind($serverResource, $settings->user . ',' . $settings->domain , $settings->pwd);
 
       if($isBinded == TRUE) return $serverResource;
-      else abort(404, "Cannot bind to LDAP server.");
+      else abort(404, "Cannot authenticate to LDAP server. Verify your credentials!");
     }
     else abort(404, "No LDAP Server available.");
   }
+
+    private function bindToServerUser($username,$password)
+    {
+        $settings = $settings = LdapSettings::first();
+        $serverResource = ldap_connect($settings->server);
+        #var_dump($settings);
+        #exit;
+        if($serverResource != FALSE) {
+            $isBinded = ldap_bind($serverResource, $settings->user_id . '=' . $username.', ' . $settings->struct_domain, $password);
+
+            if($isBinded == TRUE){ echo"It's me! ";  return $serverResource;}
+            else abort(404, "Cannot authenticate to LDAP server. Verify your credentials!");
+        }
+        else abort(404, "No LDAP Server available.");
+    }
 
   private function unbindFromServer($serverResource)
   {
@@ -59,7 +80,7 @@ class LdapController extends Controller
 
   private function getAttributesOf($attributesArray, $brPersonCPF)
   {
-    $ldapServer = $this->bindToServer();
+    $ldapServer = $this->bindToServerUser();
 
     $filter = "(" . 'uid' . "=" . $brPersonCPF . ")";
     $desiredAttributes = $attributesArray;
@@ -109,6 +130,7 @@ class LdapController extends Controller
     $attributes = ['userpassword', 'gecos', 'mail', 'telephonenumber', 'o', 'gidnumber', 'ou'];
     $userDetails = $this->getAttributesOf($attributes, $userCPF);
     $isAuthenticate = $this->isPasswordValid($userDetails['userpassword'], $userRawPassword);
+    $isAuthenticate = $this->bindToServerUser($userCPF, $userRawPassword);
 
     if($isAuthenticate == TRUE) {
 
