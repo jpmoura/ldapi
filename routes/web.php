@@ -14,3 +14,7 @@
 $app->get('/', function () use ($app) {
     return $app->version();
 });
+
+$app->get('/test', ['as' => 'test', 'uses' => 'LdapController@test']);
+//$app->get('/search/cpf={brPersonCPF}', ['as' => 'SearchByCPF', 'uses' => 'LdapController@findByBrPersonCPF']);
+$app->post('/auth', ['as' => "AuthUser", 'uses' => "LdapController@authenticate"]);
