@@ -2,86 +2,95 @@
 
 namespace App\Http\Controllers;
 
+use App\LdapFields;
+use DB;
 use App\LdapSettings;
 use Illuminate\Http\Request;
 
 class LdapController extends Controller
 {
-  private function bindToServer()
-  {
-    $settings = LdapSettings::first();
-    $serverResource = @ldap_connect($settings->server);
+    private function bindToServer()
+    {
+        $settings = LdapSettings::first();
+        $serverResource = @ldap_connect($settings->server);
 
-    if($serverResource != FALSE) {
-      $isBinded = ldap_bind($serverResource, $settings->user . ',' . $settings->domain , $settings->pwd);
+        if($serverResource != FALSE) {
+            $isBinded = ldap_bind($serverResource, $settings->user . ',' . $settings->domain , $settings->pwd);
 
-      if($isBinded == TRUE) return $serverResource;
-      else return response("Invalid credentials for reader user.", 401);
+            if($isBinded == TRUE) return $serverResource;
+            else return response("Invalid credentials for reader user.", 401);
+        }
+        else return response("No LDAP Server available.", 404);
     }
-    else return response("No LDAP Server available.", 404);
-  }
 
-  private function checkUserCredentials($username, $password)
-  {
-    $settings = LdapSettings::first();
-    $serverResource = @ldap_connect($settings->server);
+    private function checkUserCredentials($username, $password)
+    {
+        $settings = LdapSettings::first();
+        $serverResource = @ldap_connect($settings->server);
 
-    if($serverResource != FALSE) {
-        $isBinded = @ldap_bind($serverResource, $settings->user_id . '=' . $username.', ' . $settings->struct_domain, $password);
+        if($serverResource != FALSE) {
+            $isBinded = @ldap_bind($serverResource, $settings->user_id . '=' . $username.', ' . $settings->struct_domain, $password);
 
-        if($isBinded == TRUE) return $serverResource;
-        else return FALSE;
+            if($isBinded == TRUE) return $serverResource;
+            else return FALSE;
+        }
+        else return response("No LDAP Server available.", 404);
     }
-    else return response("No LDAP Server available.", 404);
-  }
 
-  private function unbindFromServer($serverResource)
-  {
-    return @ldap_unbind($serverResource);
-  }
-
-  private function getAttributesOf($attributesArray, $brPersonCPF)
-  {
-    $ldapServer = $this->bindToServer();
-
-    $filter = "(" . 'uid' . "=" . $brPersonCPF . ")";
-    $desiredAttributes = $attributesArray;
-    $searchResults = ldap_search($ldapServer, 'dc=ufop,dc=br', $filter, $desiredAttributes);
-    $entries = ldap_get_entries($ldapServer, $searchResults);
-
-    if ($entries['count'] > 0) {
-      $response = array();
-
-      foreach ($desiredAttributes as $attribute) {
-        $response[$attribute] = $entries[0][$attribute][0];
-      }
-
-      $this->unbindFromServer($ldapServer);
-      return $response;
+    private function unbindFromServer($serverResource)
+    {
+        return @ldap_unbind($serverResource);
     }
-    else return response('User Not found', 404);;
-  }
 
-  public function authenticate(Request $request)
-  {
-    $userCPF =  $request->input('brPersonCPF');
-    $userRawPassword = $request->input('password');
-    $isAuthenticate = $this->checkUserCredentials($userCPF, $userRawPassword);
+    private function getAttributesOf($attributesArray, $userIdField)
+    {
+        $ldapServer = $this->bindToServer();
 
-    if($isAuthenticate != FALSE) {
-      $attributes = ['userpassword', 'gecos', 'mail', 'telephonenumber', 'o', 'gidnumber', 'ou'];
-      $userDetails = $this->getAttributesOf($attributes, $userCPF);
+        $settings = LdapSettings::First();
+        $fields = LdapFields::All();
 
-      $jsonResponse = array();
-      $jsonResponse['nome'] = $userDetails['gecos'];
-      $jsonResponse['email'] = $userDetails['mail'];
-      $jsonResponse['telefone'] = $userDetails['telephonenumber'];
-      $jsonResponse['grupo'] = $userDetails['ou'];
-      $jsonResponse['idGrupo'] = $userDetails['gidnumber'];
-      $jsonResponse['local'] = $userDetails['o'];
+        foreach ($fields as $row) $ldapNames[$row->nickname] = $row->ldapname;
 
-      return response()->json($jsonResponse);
+        $filter = "(" . $settings->user_id . "=" . $userIdField . ")";
+
+        foreach ($attributesArray as $attribute) {
+            if(isset($ldapNames[$attribute])){
+                $desiredAttributes[] = $ldapNames[$attribute];
+                $responseAttributes[$attribute] = $ldapNames[$attribute];
+            }
+            else return array(FALSE, $attribute);
+        }
+
+        $searchResults = ldap_search($ldapServer, $settings->domain, $filter, $desiredAttributes);
+        $entries = ldap_get_entries($ldapServer, $searchResults);
+
+        if ($entries['count'] > 0) {
+            $response = array();
+            foreach ($responseAttributes as $nickName => $attribute) {
+                $response[$nickName] = $entries[0][$attribute][0];
+            }
+
+            $this->unbindFromServer($ldapServer);
+            return array(TRUE,$response);
+        }
     }
-    else return response('Invalid credentials.', 401);
-  }
+
+    public function authenticate(Request $request)
+    {
+        $user =  $request->input('user');
+        $userRawPassword = $request->input('password');
+        $isAuthenticate = $this->checkUserCredentials($user, $userRawPassword);
+
+        if($isAuthenticate != FALSE) {
+            $attributes = $request->input('attributes');
+            $userDetails = $this->getAttributesOf($attributes, $user);
+
+            if(!$userDetails[0]) return response('Invalid requested fields/attributes. Invalid field: '.$userDetails[1], 404);
+            else {
+                $jsonResponse = $userDetails[1];
+                return response()->json($jsonResponse);
+            }
+        }
+        else return response('Invalid credentials.', 401);
+    }
 }
