@@ -1,21 +1,61 @@
-# Lumen PHP Framework
+# LD(AP)I - ptBR
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://poser.pugx.org/laravel/lumen-framework/d/total.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/lumen-framework/v/stable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/lumen-framework/v/unstable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://poser.pugx.org/laravel/lumen-framework/license.svg)](https://packagist.org/packages/laravel/lumen-framework)
+LD(AP)I é uma API REST que visa facilitar o uso dos dados contidos em um servidor AD
+(Active Directory).
+Os objetivos principais dessa API são:
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+* Facilitar o processo de autenticação de aplicações que usam autenticação baseadas em
+servidores AD;
+* Facilitar a recuperação de dados de tais servidores através de pesquisas de sintaxe
+mais amigável.
 
-## Official Documentation
+Essa API foi desenvolvida usando o *framework* PHP [Lumen](https://lumen.laravel.com/) na
+versão 5.3, usando o protocol LDAP para acesso ao servidor. Toda comunicação entre a API
+e o cliente é feita através de requisições HTTP do tipo POST afim de evitar que a URL
+da requisição seja muito grande, o que poderia causar erros em caso de filtros de
+pesquisa muito grandes.
 
-Documentation for the framework can be found on the [Lumen website](http://lumen.laravel.com/docs).
+Toda requisição e resposta entre API e cliente é feito usando
+o formato de dados JSON e a sua escolha se deve a facilidade de leitura, tanto a nível
+de máquina quanto humano, e também pelo fato de poder ser convertido facilmente para
+qualquer outro tipo dado e assim podendo ser exportado, virtualemente, para qualquer
+aplicação.
 
-## Security Vulnerabilities
+# Instalação
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+Após clonar este repositório e movê-lo para o devido diretório dentro do servidor WEB
+que irá hospedar essa API, navegue pelo terminal até o diretório raiz da API e
+dê o seguinte comando:
 
-## License
+```bash
+composer install
+```
 
-The Lumen framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+Dependendo das suas configurações, será necessário efetuar o comando com permissões de
+super usuário (`sudo`). Talvez seja necessário também dar permissões especiais a todos
+os arquivos do diretório. Isso pode ser feito através do comando:
+
+```bash
+sudo chown SeuUsuario:www-data CaminhoParaDiretórioDaAPI -R
+```
+
+Substitua as palavras `SeuUsuario` e `CaminhoParaDiretórioDaAPI` de acordo com seu
+usuário no servidor WEB e o caminho (path) do diretório onde os arquivos da API
+se encontram.
+
+# Como usar
+
+# LD(AP)I - enUS
+
+LD(AP)I is a REST API for easy access data in AD servers. The main goals of this API are:
+
+* To easier the authentication process for applications that have they authentication base
+on AD;
+* To facilitate the access of data in those AD server via a more friendly search syntax.
+
+It was build using the version 5.3 of [Lumen](https://lumen.laravel.com/) framework,
+which is a PHP framework for micro-services.
+
+# Installation
+
+# Usage
