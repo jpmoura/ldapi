@@ -10,6 +10,7 @@ use Mockery\CountValidator\Exception;
 
 class  LdapController extends Controller
 {
+
     private function bindToServer()
     {
         $settings = LdapSettings::first();
@@ -50,7 +51,7 @@ class  LdapController extends Controller
         $settings = LdapSettings::first();
         $fields = LdapFields::all();
 
-        foreach ($fields as $row) $ldapNames[$row->nickname] = $row->ldapname;
+        foreach ($fields as $row) $ldapNames[$row->alias] = $row->name;
 
         $filter = "(" . $settings->user_id . "=" . $userIdField . ")";
 
@@ -68,8 +69,8 @@ class  LdapController extends Controller
         $responseAttributes = array();
         if ($entries['count'] > 0) {
             $response = array();
-            foreach ($responseAttributes as $nickName => $attribute) {
-                $response[$nickName] = $entries[0][$attribute][0];
+            foreach ($responseAttributes as $alias => $attribute) {
+                $response[$alias] = $entries[0][$attribute][0];
             }
 
             $this->unbindFromServer($ldapServer);
@@ -117,7 +118,7 @@ class  LdapController extends Controller
                 $desiredAttributes = array();
                 $jsonAttributes = array();
 
-                foreach ($fields as $row) $ldapNames[$row->nickname] = $row->ldapname; // gera um array usando apelido como index e valor como o nome do campo no ldap
+                foreach ($fields as $row) $ldapNames[$row->alias] = $row->name; // gera um array usando apelido como index e valor como o nome do campo no ldap
                 foreach ($attributesArray as $attribute) { // Para cada apelido de campo
                     if(isset($ldapNames[$attribute])){ // se ele existir no array associativo de apelido com nome original
                         $desiredAttributes[] = $ldapNames[$attribute]; // cria um array só com os nomes originais do ldap
@@ -141,8 +142,8 @@ class  LdapController extends Controller
                         foreach ($entries as $entry) {
                             $oneJsonObject = array();
 
-                            foreach ($jsonAttributes as $nickName => $attribute)
-                                $oneJsonObject[$nickName] = $entry[$attribute][0];
+                            foreach ($jsonAttributes as $alias => $attribute)
+                                $oneJsonObject[$alias] = $entry[$attribute][0];
 
                             $allEntries[] = $oneJsonObject;
                         }
@@ -265,9 +266,9 @@ class  LdapController extends Controller
      */
     private function aliasToLdapAttribute($alias)
     {
-        $ldapField = LdapFields::where('nickname', $alias)->first();
+        $ldapField = LdapFields::where('alias', $alias)->first();
         if(is_null($ldapField)) abort(400, "Alias '" . $alias . "' not found. Check for typo.");
-        else return $ldapField->ldapname;
+        else return $ldapField->name;
     }
 
     /**
@@ -276,9 +277,9 @@ class  LdapController extends Controller
      */
     private function ldapAttributeToAlias($ldapAttribute)
     {
-        $ldapField = LdapFields::where('ldapname', $ldapAttribute)->first();
+        $ldapField = LdapFields::where('name', $ldapAttribute)->first();
         if(is_null($ldapField)) abort(500, "No alias for for attribute '" . $ldapAttribute . "' not found. Contact webmaster and check for typo in database.");
-        else return $ldapField->ldapname;
+        else return $ldapField->name;
     }
 
     /**

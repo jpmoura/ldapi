@@ -15,6 +15,8 @@ $app->get('/', function () use ($app) {
     return $app->version();
 });
 
-$app->post('/auth', ['as' => "Auth", 'uses' => "LdapController@authenticate"]);
-$app->post('/search', ['as' => "Search", 'uses' => "LdapController@search"]);
-$app->post('/searchLikeLdap', ['as' => "SearchLikeLdap", 'uses' => "LdapController@searchLikeLDAP"]);
+$app->group(['middleware' => 'auth', 'namespace' => 'App\Http\Controllers'], function () use ($app) {
+    $app->post('/auth', ['as' => "Auth", 'uses' => "LdapController@authenticate"]);
+    $app->post('/search', ['as' => "Search", 'uses' => "LdapController@search"]);
+    $app->post('/searchLikeLdap', ['as' => "SearchLikeLdap", 'uses' => "LdapController@searchLikeLDAP"]);
+});
