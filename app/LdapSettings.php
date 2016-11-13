@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class LdapSettings extends Model
 {
-  //protected $primaryKey = 'server';
-  protected $table = "settings";
-  public $timestamps = false;
+    protected $primaryKey = 'server';
+    public $incrementing = false;
+    protected $table = "settings";
+    public $timestamps = false;
 }

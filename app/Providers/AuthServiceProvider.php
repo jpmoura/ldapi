@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\User;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -36,9 +37,43 @@ class AuthServiceProvider extends ServiceProvider
 //            }
 //        });
 
+        Gate::define('administration', function ($user) {
+            return $user->role == "admin";
+        });
+
         $this->app['auth']->viaRequest('api', function ($request) {
-            if ($request->hasHeader('php-auth-user') && $request->hasHeader('php-auth-pw')) {
-                return User::where('username', $request->header('php-auth-user'))->where('password', $request->header('php-auth-pw'))->first();
+            if ($request->hasHeader('Authorization')) {
+                $args = explode(' ', $request->header('Authorization'));
+                if($args[0] == "Basic")
+                {
+                    $params = explode(':', base64_decode($args[1]));
+                    $username = $params[0];
+                    $password = $params[1];
+
+                    $user = User::where('username', $username)->first();
+
+                    if(is_null($user))
+                    {
+                        echo "No user found with this username.";
+                        return NULL;
+                    }
+                    else if(Hash::check($password, $user->password)) return $user;
+                    else
+                    {
+                        echo "Wrong password.";
+                        return NULL;
+                    }
+                }
+                else
+                {
+                    echo "Authentication method is not Basic. Only Basic method is accept.";
+                    return NULL;
+                }
+            }
+            else
+            {
+                echo "The request doesn't has the Authentication header. Check your request header.";
+                return NULL;
             }
         });
     }

@@ -13,6 +13,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     use Authenticatable, Authorizable;
 
     protected $primaryKey = 'username';
+    public $incrementing = false;
     protected $table = "users";
     public $timestamps = false;
 
@@ -23,14 +24,5 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $fillable = [
         'username', 'password', 'description'
-    ];
-
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
     ];
 }

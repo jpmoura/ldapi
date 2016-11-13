@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\LdapFields;
-use DB;
 use App\LdapSettings;
 use Illuminate\Http\Request;
-use Mockery\CountValidator\Exception;
 
 class  LdapController extends Controller
 {

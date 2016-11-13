@@ -16,7 +16,31 @@ $app->get('/', function () use ($app) {
 });
 
 $app->group(['middleware' => 'auth', 'namespace' => 'App\Http\Controllers'], function () use ($app) {
-    $app->post('/auth', ['as' => "Auth", 'uses' => "LdapController@authenticate"]);
-    $app->post('/search', ['as' => "Search", 'uses' => "LdapController@search"]);
-    $app->post('/searchLikeLdap', ['as' => "SearchLikeLdap", 'uses' => "LdapController@searchLikeLDAP"]);
+
+    $app->get('/admin', ['as' => 'getHome', 'uses' => 'PagesController@getHome']);
+
+    $app->get('/add/user', ['as' => 'getAddUser', 'uses' => 'PagesController@getAddUser']);
+    $app->get('/add/fields', ['as' => 'getAddField', 'uses' => 'PagesController@getAddLdapFields']);
+
+    $app->post('/add/user', ['as' => 'doAddUser', 'uses' => 'UserController@addUser']);
+    $app->post('/add/fields', ['as' => 'doAddField', 'uses' => 'LdapFieldsController@addField']);
+
+    $app->get('/list/settings', ['as' => 'listSettings', 'uses' => 'PagesController@getListLdapSettings']);
+    $app->get('/list/fields', ['as' => 'listFields', 'uses' => 'PagesController@getListLdapFields']);
+    $app->get('/list/users', ['as' => 'listUser', 'uses' => 'PagesController@getListUsers']);
+
+    $app->get('/edit/user/{id}', ['as' => 'getEditUser', 'uses' => 'PagesController@getEditUser']);
+    $app->get('/edit/settings/{id}', ['as' => 'getEditLdapSettings', 'uses' => 'PagesController@getEditLdapSettings']);
+    $app->get('/edit/fields/{id}', ['as' => 'getEditLdapFields', 'uses' => 'PagesController@getEditLdapField']);
+
+    $app->post('/edit/user', ['as' => 'postEditUser', 'uses' => 'UserController@editUser']);
+    $app->post('/edit/settings', ['as' => 'postEditSettings', 'uses' => 'LdapSettingsController@editSettings']);
+    $app->post('/edit/fields', ['as' => 'postEditField', 'uses' => 'LdapFieldsController@editField']);
+
+    $app->post('/delete/user', ['as' => 'deleteUser', 'uses' => 'UserController@deleteUser']);
+    $app->post('/delete/fields', ['as' => 'deleteField', 'uses' => 'LdapFieldsController@deleteField']);
+
+    $app->post('/auth', ['as' => "auth", 'uses' => "LdapController@authenticate"]);
+    $app->post('/search', ['as' => "search", 'uses' => "LdapController@search"]);
+    $app->post('/searchLikeLdap', ['as' => "searchLikeLdap", 'uses' => "LdapController@searchLikeLDAP"]);
 });
