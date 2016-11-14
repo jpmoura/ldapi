@@ -8,7 +8,11 @@ use Illuminate\Http\Request;
 
 class  LdapController extends Controller
 {
-
+    /**
+     * Binds to AD server using the user saved in settings table present in database.
+     *
+     * @return resource The resource related to LDAP connection or void if fails.
+     */
     private function bindToServer()
     {
         $settings = LdapSettings::first();
@@ -20,9 +24,16 @@ class  LdapController extends Controller
             if($isBind == TRUE) return $serverResource;
             else abort(401, "Invalid credentials for reader user.");
         }
-        else abort(503, "No LDAP Server available.");
+        else abort(503, "LDAP Server isn't available.");
     }
 
+    /**
+     * Checks the credentials of a specific user.
+     *
+     * @param $username User name
+     * @param $password User password
+     * @return bool|resource FALSE if the user's credentials are invalid or the connection resource if they are valid.
+     */
     private function checkUserCredentials($username, $password)
     {
         $settings = LdapSettings::first();
@@ -37,11 +48,23 @@ class  LdapController extends Controller
         else abort(503, "No LDAP Server available.");
     }
 
+    /**
+     * Unbinds from AD server.
+     * @param $serverResource Resource related to LDAP connection
+     * @return bool True on success and False on fail.
+     */
     private function unbindFromServer($serverResource)
     {
         return @ldap_unbind($serverResource);
     }
 
+    /**
+     * Get all desired attributes of a specific user.
+     *
+     * @param $attributesArray Array with aliases of all desired attributes
+     * @param $userIdField User unique identification
+     * @return array Array with all desired attributes
+     */
     private function getAttributesOf($attributesArray, $userIdField)
     {
         $ldapServer = $this->bindToServer();
@@ -76,29 +99,44 @@ class  LdapController extends Controller
         }
     }
 
+    /**
+     * Authenticates a user or not.
+     *
+     * @param Request $request The request with inputs from user.
+     * @return \Illuminate\Http\JsonResponse|void A JSON if user is authenticated or void if not.
+     */
     public function authenticate(Request $request)
     {
         $user =  $request->input('user');
-        $userRawPassword = $request->input('password');
-        $isAuthenticate = $this->checkUserCredentials($user, $userRawPassword);
+        $password = $request->input('password');
+        $isAuthenticate = $this->checkUserCredentials($user, $password);
 
-        if($isAuthenticate != FALSE) {
+        if($isAuthenticate != FALSE)
+        {
             $attributes = $request->input('attributes');
 
-            if(isset($attributes)) {
+            if(isset($attributes))
+            {
                 $userDetails = $this->getAttributesOf($attributes, $user);
 
-                if(!$userDetails[0]) abort(400, 'Invalid requested fields/attributes. Invalid field: '.$userDetails[1]);
-                else {
+                if(!$userDetails[0]) abort(400, 'Invalid requested fields/attributes. Invalid field: '. $userDetails[1]);
+                else
+                {
                     $jsonResponse = $userDetails[1];
                     return response()->json($jsonResponse);
                 }
             }
-            else return response("Ok", 200);
+            else return response()->json(['authenticated' => TRUE]);
         }
         else return abort(401, 'Invalid credentials.');
     }
 
+    /**
+     * Search in AD server using raw LDAP filter expressions.
+     *
+     * @param Request $request Request with inputs that have the raw parameters.
+     * @return \Illuminate\Http\JsonResponse|void A JSON with all wanted attributes or void if parameters are invalid.
+     */
     public function searchLikeLDAP(Request $request)
     {
         $filter = $request->input("filter");
@@ -156,6 +194,12 @@ class  LdapController extends Controller
         else abort(400, "You need to inform a filter.");
     }
 
+    /**
+     * Search in AD server using API syntax.
+     *
+     * @param Request $request Request with all necessary inputs.
+     * @return \Illuminate\Http\JsonResponse A JSON with all desired returning attributes converted to alias or void if something fail.
+     */
     public function search(Request $request)
     {
         if($request->isJson()) {
@@ -219,6 +263,12 @@ class  LdapController extends Controller
         else abort(406, "Request must be in JSON format. Check the Content-type HTTP header of your request.");
     }
 
+    /**
+     * Converts an array of alias attributes into an array of AD attributes.
+     *
+     * @param $desiredAttributes Array of aliases
+     * @return array Array of AD attributes
+     */
     private function convertToLdapAttributes($desiredAttributes)
     {
         $convertedAttributes = array();
@@ -259,6 +309,8 @@ class  LdapController extends Controller
     }
 
     /**
+     * Get the AD field of an alias.
+     *
      * @param $alias Alias of a LDAP attribute
      * @return string The attribute name in  server
      */
@@ -270,6 +322,8 @@ class  LdapController extends Controller
     }
 
     /**
+     * Get the alias of an AD field.
+     *
      * @param $ldapAttribute Attribute name in LDAP server
      * @return Alias of LDAP attribute
      */
@@ -281,6 +335,8 @@ class  LdapController extends Controller
     }
 
     /**
+     * Parses the match rule of a filter.
+     *
      * @param $key
      * @param $rawFilter
      * @return string
@@ -293,6 +349,8 @@ class  LdapController extends Controller
     }
 
     /**
+     * Get the match operator of a filter.
+     *
      * @param $operator Operator from request body
      * @return null|string Null if is a nonexistent operator or its value in LDAP filter syntax
      */
@@ -309,6 +367,8 @@ class  LdapController extends Controller
     }
 
     /**
+     * Get the connector between attributes of a filter.
+     *
      * @param $connector
      * @return null|string Null if is a nonexistent connector or its value in LDAP filter syntax
      */

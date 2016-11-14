@@ -54,7 +54,7 @@ class AuthServiceProvider extends ServiceProvider
 
                     if(is_null($user))
                     {
-                        echo "No user found with this username.";
+                        echo "No API user found with this username." . "<br>";
                         return NULL;
                     }
                     else if(Hash::check($password, $user->password)) return $user;
@@ -66,13 +66,13 @@ class AuthServiceProvider extends ServiceProvider
                 }
                 else
                 {
-                    echo "Authentication method is not Basic. Only Basic method is accept.";
+                    echo "Authentication method is not Basic. Only Basic method is accept." . "<br>";
                     return NULL;
                 }
             }
             else
             {
-                echo "The request doesn't has the Authentication header. Check your request header.";
+                echo "The request doesn't has the Authentication header. Check your request header." . "<br>";
                 return NULL;
             }
         });
