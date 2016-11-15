@@ -331,7 +331,7 @@ class  LdapController extends Controller
     {
         $ldapField = LdapFields::where('name', $ldapAttribute)->first();
         if(is_null($ldapField)) abort(500, "No alias for for attribute '" . $ldapAttribute . "' not found. Contact webmaster and check for typo in database.");
-        else return $ldapField->name;
+        else return $ldapField->alias;
     }
 
     /**
