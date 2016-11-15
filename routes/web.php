@@ -17,6 +17,7 @@ $app->get('/', function () use ($app) {
 
 $app->group(['middleware' => 'auth', 'namespace' => 'App\Http\Controllers'], function () use ($app) {
 
+    /* Dashboard routes */
     $app->get('/admin', ['as' => 'getHome', 'uses' => 'PagesController@getHome']);
 
     $app->get('/add/user', ['as' => 'getAddUser', 'uses' => 'PagesController@getAddUser']);
@@ -40,6 +41,7 @@ $app->group(['middleware' => 'auth', 'namespace' => 'App\Http\Controllers'], fun
     $app->post('/delete/user', ['as' => 'deleteUser', 'uses' => 'UserController@deleteUser']);
     $app->post('/delete/fields', ['as' => 'deleteField', 'uses' => 'LdapFieldsController@deleteField']);
 
+    /* API routes */
     $app->post('/auth', ['as' => "auth", 'uses' => "LdapController@authenticate"]);
     $app->post('/search', ['as' => "search", 'uses' => "LdapController@search"]);
     $app->post('/searchLikeLdap', ['as' => "searchLikeLdap", 'uses' => "LdapController@searchLikeLDAP"]);

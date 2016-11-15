@@ -47,6 +47,7 @@
             </div>
 
             <div class="text-center">
+                <button type="button" class="btn btn-default" onclick="history.back()"><i class="fa fa-arrow-left"></i> Back</button>
                 <a href="{{ url('/add/fields') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Add field</a>
             </div>
         </div>

@@ -213,11 +213,11 @@ class  LdapController extends Controller
             $rawFilters = $searchRequest->get('filters');
             if(is_null($rawFilters)) $error = "filters";
 
-            $rawDesiredAttributes = $searchRequest->get('returningAttributes');
+            $rawDesiredAttributes = $searchRequest->get('attributes');
             if(is_null($rawDesiredAttributes)) $error = "returning attributes";
 
             $searchBase = $searchRequest->get('searchBase');
-            if(is_null($searchBase)) $error = "search base";
+            if(is_null($searchBase)) $searchBase = LdapSettings::first()->domain;
 
             if(isset($error)) abort(400, "You need to inform the " . $error . ".If you informed, check if the JSON is well formed.");
 
@@ -359,8 +359,8 @@ class  LdapController extends Controller
         if(strcasecmp ($operator, "equals") == 0) return "=";
         elseif(strcasecmp ($operator, "present") == 0) return "*=";
         elseif(strcasecmp ($operator, "approximately") == 0) return "~=";
-        elseif(strcasecmp ($operator, "lessOrEqual") == 0) return "<=";
-        elseif(strcasecmp ($operator, "greaterOrEqual") == 0) return ">=";
+        elseif(strcasecmp ($operator, "lessOrEquals") == 0) return "<=";
+        elseif(strcasecmp ($operator, "greaterOrEquals") == 0) return ">=";
         elseif(strcasecmp ($operator, "lessThan") == 0) return "<";
         elseif(strcasecmp ($operator, "greaterThan") == 0) return ">";
         else abort(400, "No LDAP operator for '" . $operator . "' found. Check for typo.");
