@@ -64,24 +64,24 @@ acrescida de `/admin`. A base de dados é constituída das seguintes tabelas:
  vice-versa. Ela é constituída
  de duas colunas:
  
- | Coluna        | Tipo de Dado           | Descrição                                              |
- |:-------------:|:----------------------:|:------------------------------------------------------:|
- | name          | varchar(50) PK         | Corresponde ao nome do atributo no servidor AD         |
- | alias         | varchar(50)            | Apelido que irá ser usado nas pesquisas e autenticação |
+| Coluna | Tipo de Dado   | Descrição                       |
+|:------:|:--------------:|:-------------------------------:|
+| name   | varchar(50) PK | Nome do atributo no servidor AD |
+| alias  | varchar(50)    | Apelido do atributo             |
 
 ## 2.2 Tabela Settings
 
 A tabela *settings* se refere as configurações do servidor AD que será utilizado nas pequisas
 e autenticação de usuários. Suas colunas são:
 
- | Coluna        | Tipo de Dado           | Descrição                                                                                       |
- |:-------------:|:----------------------:|:-----------------------------------------------------------------------------------------------:|
- | server        | varchar(15) PK         | Corresponde ao endereço IP do servidor AD                                                       |
- | user          | varchar(20)            | Usuário com permissão de leitura no servidor AD                                                 |
- | domain        | varchar(20)            | Domínio base do usuário de leitura                                                              |
- | pwd           | varchar(255)           | Senha do usuário de leitura                                                                     |
- | user_id       | varchar(25)            | Atributo no servidor AD que identifica unicamente cada usuário e que será usado na autenticação |
- | struct_domain | varchar(100)           | Domínio base dos usuários que serão autenticados pela API                                       |
+| Coluna        | Tipo de Dado           |Descrição                                                                         |
+|:-------------:|:----------------------:|:--------------------------------------------------------------------------------:|
+| server        | varchar(15) PK         | Endereço IP do servidor AD                                                       |
+| user          | varchar(20)            | Usuário com permissão de leitura no servidor AD                                  |
+| domain        | varchar(20)            | Domínio base do usuário de leitura                                               |
+| pwd           | varchar(255)           | Senha do usuário de leitura                                                      |
+| user_id       | varchar(25)            | Atributo que identifica unicamente as entidades e que será usado na autenticação |
+| struct_domain | varchar(100)           | Domínio base dos usuários que serão autenticados pela API                        |
  
 ## 2.3 Tabela User
 
