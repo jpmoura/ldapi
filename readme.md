@@ -1,3 +1,5 @@
+You can see a English version of this README by clicking [here](#ld(ap)i---enus).
+
 # LD(AP)I - ptBR
 
 LD(AP)I é uma API REST que visa facilitar o uso dos dados contidos em um servidor AD
@@ -44,6 +46,17 @@ Substitua as palavras `Seu_Usuario` e `Caminho_Para_Diretório_Da_API` de acordo
 usuário no servidor WEB e o caminho (*path*) do diretório onde os arquivos da API
 se encontram. Essas configurações são baseadas em sistemas Linux utilizando o
 [servidor Apache](https://httpd.apache.org/).
+
+## 1.1 Requisitos
+
+Os requisitos para o funcionamento da API são os mesmos requisitos do *framework* [Lumen](), acrescidos dos
+plugins PHP para SQLite 3:
+
+* Versão do PHP >= 5.6.4;
+* Extensão PHP OpenSSL;
+* Extensão PHP PDO para SQLite;
+* Extensão PHP SQLite;
+* Extensão PHP Mbstring.
 
 # 2. Configuração
 
@@ -279,7 +292,7 @@ A falta de um destes atributos, com execeção de `searchBase`, que é opcional,
 #### 3.2.2.1 Filtros de pesquisa
 
 Cada elemento do vetor de filtro é um objeto JSON contendo o apelido do atributo e seu valor é um vetor unidimensional
-(*array*) contendo o tipo de combinação e o valor do campo para a combinação e deve ser informado só e somente só
+(*array*) contendo o tipo de combinação e o valor do campo para a combinação e deve ser informado **só e somente só**
 nesta ordem. Caso a ondem seja invertida, resultará em erro. Os operadores de combinação que podem ser:
 
 | Tipo                  | Valor             |
@@ -394,6 +407,34 @@ on AD;
 It was build using the version 5.3 of [Lumen](https://lumen.laravel.com/) framework,
 which is a PHP framework for micro-services.
 
-# Installation
+# 1. Installation
 
-# Usage
+## 1.1 Requirements
+
+# 2. Configuration
+
+## 2.1 Fields table
+
+## 2.2 Settings table
+
+## 2.3 Users table
+
+# 3. Usage
+
+## 3.1 Authentication
+
+## 3.2 Search
+
+### 3.2.1 Using native AD syntax
+
+#### 3.2.1.1 Example
+
+### 3.2.2 Using API syntax
+
+#### 3.2.2.1Search filters
+
+#### 3.2.2.2 Search results
+
+#### 3.2.2.3 Example
+
+# 4. TODO

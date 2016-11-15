@@ -65,7 +65,7 @@ class  LdapController extends Controller
      * @param $userIdField User unique identification
      * @return array Array with all desired attributes
      */
-    private function getAttributesOf($attributesArray, $userIdField)
+    private function getAttributesOf($attributesArray, $userID)
     {
         $ldapServer = $this->bindToServer();
 
@@ -74,7 +74,7 @@ class  LdapController extends Controller
 
         foreach ($fields as $row) $ldapNames[$row->alias] = $row->name;
 
-        $filter = "(" . $settings->user_id . "=" . $userIdField . ")";
+        $filter = "(" . $settings->user_id . "=" . $userID . ")";
 
         $desiredAttributes = array();
         foreach ($attributesArray as $attribute) {
