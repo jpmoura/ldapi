@@ -1,4 +1,4 @@
-You can see a English version of this README by clicking [here](#ld(ap)i---enus).
+**You can see a English version of this README by clicking [here](#ldapi---enus).**
 
 # LD(AP)I - ptBR
 
