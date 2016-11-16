@@ -392,7 +392,6 @@ da API através de navegadores que suporte URL's do tipo http://Usuario:Senha@ur
 * Otimizar códigos de pesquisa;
 * Tratar exceções de CRUD do painel de controle;
 * Possibilitar que o servidor seja informado não só por IP;
-* Encriptar a senha do usuário leitor do AD;
 * Adicionar opção de mudar a base da pesquisa para pesquisas feitas em sintaxe de AD;
 * Utilizar bibliotecas CSS e Javascript localmente ao invés de remoto.
 
@@ -431,7 +430,7 @@ which is a PHP framework for micro-services.
 
 ### 3.2.2 Using API syntax
 
-#### 3.2.2.1Search filters
+#### 3.2.2.1 Search filters
 
 #### 3.2.2.2 Search results
 
