@@ -32,7 +32,7 @@
                             <td>{!! $settings->server !!}</td>
                             <td>{!! $settings->user !!}</td>
                             <td>{!! $settings->domain !!}</td>
-                            <td>Hidden</td>
+                            <td>Encrypted</td>
                             <td>{!! $settings->user_id !!}</td>
                             <td>{!! $settings->struct_domain !!}</td>
                             <td><a href="{{ url("/edit/settings/" . base64_encode($settings->server)) }}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a></td>

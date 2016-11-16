@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\LdapSettings;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class LdapSettingsController extends Controller
 {
@@ -16,7 +17,7 @@ class LdapSettingsController extends Controller
             $settings->server = $request->input("server");
             $settings->user = $request->input("user");
             $settings->domain = $request->input("domain");
-            $settings->pwd = $request->input("password");
+            $settings->pwd = Crypt::encrypt($request->input("password"));
             $settings->user_id = $request->input("userid");
             $settings->struct_domain = $request->input("structdomain");
             $settings->save();

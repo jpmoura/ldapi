@@ -15,14 +15,30 @@
         </div>
         <div class="panel-body">
             <form class="form" accept-charset="utf-8" action="{{ url('/add/user') }}" method="post">
-                <input name="username" class="form-control" type="text" placeholder="Username" required />
-                <input name="password" class="form-control" type="password" placeholder="Password" required />
-                <input name="description" class="form-control" type="text" placeholder="User description" required />
-                <select name="role" class="form-control" required>
-                    <option value="">Select a option</option>
-                    <option value="user">Normal user</option>
-                    <option value="admin">Administrator</option>
-                </select>
+
+                <div class="input-group">
+                    <span class="input-group-addon">Username</span>
+                    <input name="username" class="form-control" type="text" placeholder="Username" required />
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">Password</span>
+                    <input name="password" class="form-control" type="password" placeholder="Password" required />
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">Description</span>
+                    <input name="description" class="form-control" type="text" placeholder="User description" required />
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">Type</span>
+                    <select name="role" class="form-control" required>
+                        <option value="">Select a option</option>
+                        <option value="user">Normal user</option>
+                        <option value="admin">Administrator</option>
+                    </select>
+                </div>
 
                 <br>
 

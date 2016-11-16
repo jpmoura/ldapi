@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\LdapFields;
 use App\LdapSettings;
 use App\User;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Gate;
 
 class PagesController extends Controller
@@ -62,6 +63,7 @@ class PagesController extends Controller
         if(Gate::allows("administration"))
         {
             $settings = LdapSettings::where('server', base64_decode($id))->first();
+            $settings->pwd = Crypt::decrypt($settings->pwd);
 
             if(is_null($settings)) return response("No settings found.", 404);
             else return response(view('actions.edit.ldapsettings')->with('settings', $settings));

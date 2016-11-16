@@ -16,13 +16,29 @@
     	  <div class="panel-body">
               <form class="form" accept-charset="utf-8" action="{{ url('/edit/user') }}" method="post">
                   <input type="hidden" name="id" value="{!! $user->username !!}" />
-                  <input name="username" class="form-control" type="text" value="{!! $user->username !!}" placeholder="Username" required/>
-                  <input name="password" class="form-control" type="password" placeholder="New Password. Fill in only if you want to change the current password." />
-                  <input name="description" class="form-control" type="text" value="{!! $user->description !!}" placeholder="User description" required/>
-                  <select name="role" class="form-control" required>
-                      <option value="admin" @if($user->role == "admin") selected @endif>Administrator</option>
-                      <option value="user" @if($user->role == "user") selected @endif>Normal User</option>
-                  </select>
+
+                  <div class="input-group">
+                      <span class="input-group-addon">Username</span>
+                      <input name="username" class="form-control" type="text" value="{!! $user->username !!}" placeholder="Username" required/>
+                  </div>
+
+                  <div class="input-group">
+                      <span class="input-group-addon">Password</span>
+                      <input name="password" class="form-control" type="password" placeholder="New Password. Fill in only if you want to change the current password." />
+                  </div>
+
+                  <div class="input-group">
+                      <span class="input-group-addon">Description</span>
+                      <input name="description" class="form-control" type="text" value="{!! $user->description !!}" placeholder="User description" required/>
+                  </div>
+
+                  <div class="input-group">
+                      <span class="input-group-addon">Type</span>
+                      <select name="role" class="form-control" required>
+                          <option value="admin" @if($user->role == "admin") selected @endif>Administrator</option>
+                          <option value="user" @if($user->role == "user") selected @endif>Normal User</option>
+                      </select>
+                  </div>
 
                   <br>
 

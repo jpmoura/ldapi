@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\LdapFields;
 use App\LdapSettings;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class  LdapController extends Controller
 {
@@ -16,6 +17,8 @@ class  LdapController extends Controller
     private function bindToServer()
     {
         $settings = LdapSettings::first();
+        $settings = Crypt::decrypt($settings->pwd);
+
         $serverResource = @ldap_connect($settings->server);
 
         if($serverResource != FALSE) {

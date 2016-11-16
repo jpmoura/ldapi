@@ -15,8 +15,16 @@
         </div>
         <div class="panel-body">
             <form class="form" accept-charset="utf-8" action="{{ url('/add/fields') }}" method="post">
-                <input name="name" class="form-control" type="text" placeholder="AD field name" required />
-                <input name="alias" class="form-control" type="text" placeholder="Alias" required />
+
+                <div class="input-group">
+                    <span class="input-group-addon">Attribute name</span>
+                    <input name="name" class="form-control" type="text" placeholder="AD field name" required />
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">Attribute alias</span>
+                    <input name="alias" class="form-control" type="text" placeholder="Alias" required />
+                </div>
 
                 <br>
 

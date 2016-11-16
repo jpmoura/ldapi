@@ -16,8 +16,15 @@
         <div class="panel-body">
             <form class="form" accept-charset="utf-8" action="{{ url('/edit/fields') }}" method="post">
                 <input type="hidden" name="id" value="{!! $field->name !!}" />
-                <input name="name" class="form-control" type="text" placeholder="AD field name" value="{!! $field->name !!}" required />
-                <input name="alias" class="form-control" type="text" placeholder="Alias" value="{!! $field->alias !!}" required />
+                <div class="input-group">
+                    <span class="input-group-addon">Attribute name</span>
+                    <input name="name" class="form-control" type="text" placeholder="AD field name" value="{!! $field->name !!}" required />
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">Attribute alias</span>
+                    <input name="alias" class="form-control" type="text" placeholder="Alias" value="{!! $field->alias !!}" required />
+                </div>
 
                 <br>
 
