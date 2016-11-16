@@ -70,33 +70,22 @@ class  LdapController extends Controller
         $ldapServer = $this->bindToServer();
 
         $settings = LdapSettings::first();
-        $fields = LdapFields::all();
-
-        foreach ($fields as $row) $ldapNames[$row->alias] = $row->name;
 
         $filter = "(" . $settings->user_id . "=" . $userID . ")";
 
-        $desiredAttributes = array();
-        foreach ($attributesArray as $attribute) {
-            if(isset($ldapNames[$attribute])){
-                $desiredAttributes[] = $ldapNames[$attribute];
-                $responseAttributes[$attribute] = $ldapNames[$attribute];
-            }
-            else return array(FALSE, $attribute);
-        }
+        foreach ($attributesArray as $attribute) $adAttributes[] = $this->aliasToLdapAttribute($attribute);
 
-        $searchResults = ldap_search($ldapServer, $settings->domain, $filter, $desiredAttributes);
+        $searchResults = ldap_search($ldapServer, $settings->domain, $filter, $adAttributes);
         $entries = ldap_get_entries($ldapServer, $searchResults);
-        $responseAttributes = array();
-        if ($entries['count'] > 0) {
-            $response = array();
-            foreach ($responseAttributes as $alias => $attribute) {
-                $response[$alias] = $entries[0][$attribute][0];
-            }
 
-            $this->unbindFromServer($ldapServer);
-            return array(TRUE,$response);
-        }
+        //dd($entries);
+
+        foreach ($adAttributes as $attribute) $response[$this->ldapAttributeToAlias($attribute)] = $entries[0][$attribute][0];
+
+        $this->unbindFromServer($ldapServer);
+
+        return $response;
+
     }
 
     /**
@@ -118,13 +107,7 @@ class  LdapController extends Controller
             if(isset($attributes))
             {
                 $userDetails = $this->getAttributesOf($attributes, $user);
-
-                if(!$userDetails[0]) abort(400, 'Invalid requested fields/attributes. Invalid field: '. $userDetails[1]);
-                else
-                {
-                    $jsonResponse = $userDetails[1];
-                    return response()->json($jsonResponse);
-                }
+                return response()->json($userDetails);
             }
             else return response()->json(['authenticated' => TRUE]);
         }

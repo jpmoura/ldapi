@@ -46,7 +46,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        //return response($e->getMessage(), $e->getStatusCode());
-        return parent::render($request, $e);
+        return response($e->getMessage(), $e->getStatusCode());
+        //return parent::render($request, $e);
     }
 }
