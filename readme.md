@@ -386,7 +386,14 @@ Um possível resultado para essa pesquisa poderia ser:
  }
 ```
 
-# 4. A Fazer
+# 4. Função de ajuda
+
+Para essa primeira versão, existe uma função de ajuda que retorna todos os apelidos dos
+campos disponíveis. Para acessá-la, basta enviar uma requisição POST vazia para o endereço
+da URL base da aPI acrescida de `/aliases` e um vetor unidimensional (*array*) será retornado
+com todos os apelidos de atributos cadastrados.
+
+# 5. A Fazer
 
 * Migrações para automatizar ainda mais a implementação da API;
 * Verificar o *middleware* de autenticação para checar a possibilidade de acessar o painel de controle
@@ -758,7 +765,13 @@ case. Therefore, a possible response for this request is:
  }
 ```
 
-# 4. TODO
+# 4. Helper function
+
+For this first version, there is a helper function which can be access via POST request to
+the API base URL added by `/aliases` and it will return an array that contains all
+available aliases.
+
+# 5. TODO
 
 * Native Lumen migrations;
 * Check if Auth middleware can handle request from browser like http://user:password@ldap.base.url

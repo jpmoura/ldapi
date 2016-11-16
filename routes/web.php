@@ -12,7 +12,7 @@
 */
 
 $app->get('/', function () use ($app) {
-    return $app->version();
+    return response("LD(AP)I version 1.0.0");
 });
 
 $app->group(['middleware' => 'auth', 'namespace' => 'App\Http\Controllers'], function () use ($app) {
@@ -42,6 +42,7 @@ $app->group(['middleware' => 'auth', 'namespace' => 'App\Http\Controllers'], fun
     $app->post('/delete/fields', ['as' => 'deleteField', 'uses' => 'LdapFieldsController@deleteField']);
 
     /* API routes */
+    $app->post('/aliases', ['as' => "getAliases", 'uses' => "PagesController@getAliasesList"]);
     $app->post('/auth', ['as' => "auth", 'uses' => "LdapController@authenticate"]);
     $app->post('/search', ['as' => "search", 'uses' => "LdapController@search"]);
     $app->post('/searchLikeLdap', ['as' => "searchLikeLdap", 'uses' => "LdapController@searchLikeLDAP"]);

@@ -82,4 +82,17 @@ class PagesController extends Controller
         }
         else return response("You don't have permission for access the control panel.", 401);
     }
+
+    public function getAliasesList()
+    {
+        if(Gate::allows("administration"))
+        {
+            $fields = LdapFields::all();
+
+            foreach ($fields as $field) $aliases[] = $field->alias;
+
+            return response()->json($aliases);
+        }
+        else return response("You don't have permission for access the control panel.", 401);
+    }
 }
