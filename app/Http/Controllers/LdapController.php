@@ -17,7 +17,7 @@ class  LdapController extends Controller
     private function bindToServer()
     {
         $settings = LdapSettings::first();
-        $settings = Crypt::decrypt($settings->pwd);
+        $settings->pwd = Crypt::decrypt($settings->pwd);
 
         $serverResource = @ldap_connect($settings->server);
 
