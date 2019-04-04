@@ -151,7 +151,7 @@ que visa autenticar o usuário `system` de senha `secret` é igual a:
 
 ```json
 {
-    "username": "system",
+    "user": "system",
     "password": "secret"
 }
 ```
