@@ -359,7 +359,7 @@ e `email` como atributos de retorno, teríamos a requisição HTTP com o seguint
 	[
 		{"grupo": ["equals", "A*"], "primeironome": ["equals", "JOSE"]}
 	],
-	"returningAttributes": ["nomecompleto", "grupo", "email"],
+	"attributes": ["nomecompleto", "grupo", "email"],
 	"searchBase": "ou=People,dc=server,dc=com"
 }
 ```
@@ -739,7 +739,7 @@ requirements. A possible request's body would be:
     [
         {"group": ["equals", "A*"], "firstname": ["equals", "Fred"]}
     ],
-    "returningAttributes": ["fullname", "mail"],
+    "attributes": ["fullname", "mail"],
     "searchBase": "ou=People,dc=ldapi,dc=com"
 }
 ```
