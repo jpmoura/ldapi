@@ -178,7 +178,7 @@ teria um corpo igual a:
 
 ```json
 {
-    "username": "system",
+    "user": "system",
     "password": "secret",
     "attributes": ["primeironome", "ultimonome"]
 }
@@ -186,7 +186,7 @@ teria um corpo igual a:
 
 O campo attributes não possui limites, sendo possível passar quantos atributos estejam cadastrados
 na base de dados. Consirando que os valores dos atributos no servidor AD sejam, respectivamente, `Usuário`
-e `Teste`, a resposta da API considerando que o `username` e `password` então certos, seria:
+e `Teste`, a resposta da API considerando que o `user` e `password` então certos, seria:
 
 ```json
 {
@@ -535,7 +535,7 @@ To authenticates an user using this API, it is necessary to send a POST HTTP req
 to the base URL of API appended with `/auth`. The request's body must be a JSON document
 that contains, at least, two parameters:
 
-* username: the user name from the user you want to authenticate;
+* user: the user name from the user you want to authenticate;
 * password: the user password;
 
 For example, if you want to authenticate the same uses from previous example, the 
@@ -543,7 +543,7 @@ request's body it would be:
 
 ```json
 {
-    "username": "system",
+    "user": "system",
     "password": "secret"
 }
 ```
@@ -567,7 +567,7 @@ last name could it be something like:
 
 ```json
 {
-    "username": "system",
+    "user": "system",
     "password": "secret",
     "attributes": ["firstname", "lastname"]    
 }
